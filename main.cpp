@@ -14,11 +14,19 @@ struct Student {
 void printStudent(Student student) {
     cout << "Nazwisko: " << student.surname << endl;
     cout << "Oceny: [";
-    for (size_t i = 0; i < 4; i++) {
+    for (size_t i = 0; i < 5; i++) {
         cout << student.notes[i] << ", ";
     }
     cout << "]" << endl;
-    cout << "Średnia: " << student.average << endl;
+    cout << "Srednia: " << student.average << endl;
+}
+
+void printAllStudents(Student students[], size_t size) {
+
+    for (size_t i = 0; i < size; i++) {
+        cout << endl;
+        printStudent(students[i]);
+    }
 }
 
 double getRandomNote() {
@@ -38,9 +46,19 @@ double average(double numbers[], int size) {
     return sum / size;
 }
 
+void printMenu() {
+    cout << endl;
+    cout << "1. Pokaz liste wszystkich studentow" << endl;
+    cout << "2. Pokaz liste studentów powyzej sredniej" << endl;
+    cout << "3. Pokaz studenta o najwyzszej sredniej" << endl;
+    cout << "4. Pokaz studenta o podanym nazwisku" << endl;
+    cout << "0. Wyjscie" << endl;
+}
+
 int main() {
     srand(time(NULL));
-    int studentsNumber;
+    int studentsNumber, choice;
+    bool exit;
     cout << "Liczba studentów:";
     cin >> studentsNumber;
 
@@ -49,13 +67,37 @@ int main() {
         cout << "Wprowadź nazwisko studenta: ";
         cin >> students[i].surname;
 
-        for (size_t j = 0; j < 4; j++) {
+        for (size_t j = 0; j < 5; j++) {
             students[i].notes[j] = getRandomNote();
         }
 
-        students[i].average = average(students[i].notes, 4);
+        students[i].average = average(students[i].notes, 5);
+    }
 
-        printStudent(students[i]);
+    while (!exit) {
+        printMenu();
+        cin >> choice;
+        switch (choice) {
+        case 1:
+            printAllStudents(students, studentsNumber);
+            break;
+        case 2:
+            /* TODO */
+            break;
+        case 3:
+            /* TODO */
+            break;
+        case 4:
+            /* TODO */
+            break;
+        case 0:
+            exit = true;
+            break;
+
+        default:
+            cout << "Zly wybor, sproboj ponownie" << endl;
+            break;
+        }
     }
 
     return 0;
