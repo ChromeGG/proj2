@@ -1,4 +1,4 @@
-// Adam Tkaczyk [D3], Piotr Pakulski [D3]
+// Adam Tkaczyk [D3], Piotr Pakulski [D2]
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -21,11 +21,15 @@ void printStudent(Student student) {
     cout << "Srednia: " << student.average << endl;
 }
 
-void printAllStudents(Student students[], size_t size) {
-
+void printAllStudents(Student students[], size_t size, double avgAll) {
+    if (avgAll > 0 ) {
+        cout << "Serdnia wszystkich studentow: " << avgAll << ", studenci z wyzsza niz srednia wszystkich: " << endl;
+    }
     for (size_t i = 0; i < size; i++) {
-        cout << endl;
-        printStudent(students[i]);
+        if (students[i].average > avgAll) {
+            cout << endl;
+            printStudent(students[i]);
+        }
     }
 }
 
@@ -46,10 +50,37 @@ double average(double numbers[], int size) {
     return sum / size;
 }
 
+void printHigehstAvg(Student students[], size_t size) {
+    double higest{0};
+    size_t theKey;
+    for (size_t i = 0; i < size; i++) {
+        if (students[i].average > higest) {
+            higest = students[i].average;
+            theKey = i;
+        }
+    }
+    cout << "Student z najwyzsza srednia to: " << endl;
+    printStudent(students[theKey]);
+}
+
+void printStudentBySurname(Student students[], size_t size) {
+    string surname;
+
+    cout << "Podaj nazwisko studenta ktorego szukasz:" << endl;
+    cin >> surname;
+    for (size_t i = 0; i < size; i++) {
+        if (students[i].surname == surname) {
+            printStudent(students[i]);
+            break;
+        }
+    }
+
+}
+
 void printMenu() {
     cout << endl;
     cout << "1. Pokaz liste wszystkich studentow" << endl;
-    cout << "2. Pokaz liste studentów powyzej sredniej" << endl;
+    cout << "2. Pokaz liste studentów powyzej sredniej wszystkich" << endl;
     cout << "3. Pokaz studenta o najwyzszej sredniej" << endl;
     cout << "4. Pokaz studenta o podanym nazwisku" << endl;
     cout << "0. Wyjscie" << endl;
@@ -58,6 +89,7 @@ void printMenu() {
 int main() {
     srand(time(NULL));
     int studentsNumber, choice;
+    double avgAll{0};
     bool exit;
     cout << "Liczba studentów:";
     cin >> studentsNumber;
@@ -72,23 +104,25 @@ int main() {
         }
 
         students[i].average = average(students[i].notes, 5);
+        avgAll += students[i].average;
     }
+    avgAll = avgAll / (double)studentsNumber;
 
     while (!exit) {
         printMenu();
         cin >> choice;
         switch (choice) {
         case 1:
-            printAllStudents(students, studentsNumber);
+            printAllStudents(students, studentsNumber, 0);
             break;
         case 2:
-            /* TODO */
+            printAllStudents(students, studentsNumber, avgAll);
             break;
         case 3:
-            /* TODO */
+            printHigehstAvg(students, studentsNumber);
             break;
         case 4:
-            /* TODO */
+            printStudentBySurname(students, studentsNumber);
             break;
         case 0:
             exit = true;
